@@ -2,6 +2,25 @@
 #include <stdlib.h>
 #include "list.h"
 
+void print_status(STATUS result)
+{
+  if (result == Success)
+  {
+    printf("Done\n");
+    return;
+  }
+  printf("Not done\n");
+}
+
+int get_input(const char question[])
+{
+  int input;
+  printf("%s", question);
+  scanf("%d", &input);
+  while((getchar()) != '\n');
+  return input;
+}
+
 Node_ptr create_node(int value)
 {
   Node_ptr node = malloc(sizeof(NODE));
@@ -40,9 +59,8 @@ STATUS insert_at(List_ptr list, int value, int position)
   {
     current_node = current_node->next;
   }
-  Node_ptr next_node = current_node->next;
   Node_ptr new_node = create_node(value);
-  new_node->next = next_node;
+  new_node->next = current_node->next;
   current_node->next = new_node;
   list->count++;
   return Success;
@@ -96,7 +114,10 @@ STATUS add_unique(List_ptr list, int value)
 
 STATUS remove_from_start(List_ptr list)
 {
-  if (list->head == NULL) return Failure;
+  if (list->head == NULL || list->head == list->last) 
+  {
+    return clear_list(list);
+  }
   Node_ptr head = list->head->next;
   list->head = head;
   list->count--;
@@ -105,6 +126,10 @@ STATUS remove_from_start(List_ptr list)
 
 STATUS remove_from_end(List_ptr list)
 {
+  if (list->head == NULL || list->head == list->last) 
+  {
+    return clear_list(list);
+  }
   Node_ptr current_node = list->head;
   for (int index = 1; index < list->count - 1; index++)
   {
@@ -199,12 +224,11 @@ STATUS remove_all_occurrences(List_ptr list, int value) // i
   return Success;
 }
 
-STATUS decide_action_on_value(List_ptr list, char decider)
+STATUS perform_actions_upon_input_value(List_ptr list, char decider)
 {
   int value;
   STATUS result = Success;
-  printf("Enter a number as an input value : ");
-  scanf("%d", &value);
+  value = get_input("Enter a number as an input value : ");
   if (decider == 'a') result = add_to_end(list, value);
   if (decider == 'b') result = add_to_start(list, value);
   if (decider == 'd') result = add_unique(list, value);
@@ -228,9 +252,11 @@ void decide_actions(List_ptr list, char decider)
   int value, position = 0;
   STATUS result = Success;
 
+  while(getchar() != '\n');
+
   if (decider == 'a' || decider == 'b' || decider == 'd'|| decider == 'h' || decider == 'i')
   {
-    result = decide_action_on_value(list, decider);
+    result = perform_actions_upon_input_value(list, decider);
   }
   if(decider == 'l' || decider == 'e' || decider == 'f'|| decider == 'j')
   {
@@ -238,17 +264,15 @@ void decide_actions(List_ptr list, char decider)
   }
   if (decider == 'g') 
   {
-    printf("Enter the position : ");
-    scanf("%d", &position);
+    position = get_input("Enter the position : ");
     result = remove_at(list, position);
   }
   if (decider == 'c') 
   {
-    printf("Enter a number as an input value : ");
-    scanf("%d", &value);
-    printf("Enter the position : ");
-    scanf("%d", &position);
+    value = get_input("Enter a number as an input value : ");
+    position = get_input("Enter the position : ");
     result = insert_at(list, value, position);
   }
-  display(list);
+  print_status(result);
+  // display(list);
 }
