@@ -173,6 +173,7 @@ STATUS clear_list(List_ptr list)
 STATUS remove_at(List_ptr list, int position)
 {
   if (list->count < position) return Failure;
+  if (position == 0) return remove_from_start(list);
   Node_ptr current_node = list->head;
   for (int index = 1; index < position; index++)
   {
@@ -195,14 +196,13 @@ STATUS remove_first_occurrence(List_ptr list, int value) // h
       Node_ptr node_to_be_free = pair.current;
       if (pair.prev == NULL)
       {
-        pair.current = node_to_be_free->next;
-        list->head = pair.current;
+        list->head = node_to_be_free->next;
       }
       else
       {
-        pair.prev->next = pair.current->next;
-        pair.current = pair.current->next;
+        pair.prev->next = node_to_be_free->next;
       }
+      pair.current = node_to_be_free->next;
       free(node_to_be_free);
       list->count--;
       return Success;
@@ -223,14 +223,13 @@ STATUS remove_all_occurrences(List_ptr list, int value) // i
       Node_ptr node_to_be_free = pair.current;
       if (pair.prev == NULL)
       {
-        pair.current = node_to_be_free->next;
-        list->head = pair.current;
+        list->head = node_to_be_free->next;
       }
       else
       {
-        pair.prev->next = pair.current->next;
-        pair.current = pair.current->next;
+        pair.prev->next = node_to_be_free->next;
       }
+      pair.current = node_to_be_free->next;
       free(node_to_be_free);
       list->count--;
     }
