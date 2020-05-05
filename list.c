@@ -54,7 +54,7 @@ STATUS insert_at(List_ptr list, int value, int position)
 {
   if (position == 0) return add_to_start(list, value);
   if (position == list->count) return add_to_end(list, value);
-  if (position < 0 || position > list->count + 1) return Failure;
+  if (position < 0 || position > list->count) return Failure;
   Node_ptr current_node = list->head;
   for (int index = 0; index < position; index++)
   {
