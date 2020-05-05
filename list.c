@@ -49,7 +49,6 @@ void display(List_ptr list)
   printf("\n");
 }
 
-
 STATUS insert_at(List_ptr list, int value, int position)
 {
   if (position == 0) return add_to_start(list, value);
@@ -70,7 +69,6 @@ STATUS insert_at(List_ptr list, int value, int position)
 STATUS add_to_end(List_ptr list, int value)
 {
   Node_ptr node = create_node(value);
-  STATUS result = Failure;
   if(list->head == NULL)
   {
     list->head = node;
@@ -81,23 +79,15 @@ STATUS add_to_end(List_ptr list, int value)
   }
   list->last = node;
   list->count++;
-  result = Success;
-  return result;
+  return Success;
 }
 
 STATUS add_to_start(List_ptr list, int value)
 {
+  if (list->head == NULL) return add_to_end(list, value);
   Node_ptr current_head = list->head;
-  Node_ptr new_node = create_node(value);
-  if(current_head == NULL)
-  {
-    list->last = new_node;
-  }
-  else
-  {
-    new_node->next = current_head;
-  }
-  list->head = new_node;
+  list->head = create_node(value);
+  list->head->next = current_head;
   list->count++;
   return Success;
 }
@@ -117,9 +107,11 @@ STATUS remove_from_start(List_ptr list)
 {
   if (list->count == 0) return Failure;
   if (list->head == list->last) return clear_list(list);
-  Node_ptr head = list->head->next;
+  Node_ptr node_to_be_free = list->head;
+  Node_ptr head = node_to_be_free->next;
   list->head = head;
   list->count--;
+  free(node_to_be_free);
   return Success;
 }
 
@@ -134,9 +126,9 @@ STATUS remove_from_end(List_ptr list)
   }
   Node_ptr node_to_be_free = current_node->next;
   list->last = current_node;
-  free(node_to_be_free);
   current_node->next = NULL;
   list->count--;
+  free(node_to_be_free);
   return Success;
 }
 
@@ -170,9 +162,9 @@ STATUS clear_list(List_ptr list)
 
 STATUS remove_at(List_ptr list, int position)
 {
-  if (position >= list->count || position < 0) return Failure;
   if (position == 0) return remove_from_start(list);
   if (position == list->count - 1) return remove_from_end(list);
+  if (position >= list->count || position < 0) return Failure;
   Node_ptr current_node = list->head;
   for (int index = 1; index < position; index++)
   {

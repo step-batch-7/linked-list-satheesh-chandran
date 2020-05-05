@@ -19,5 +19,6 @@ int main(void)
     decide_actions(list, action);
     action = get_character();
   }
+  destroy_list(list);
   return 0;
 }
