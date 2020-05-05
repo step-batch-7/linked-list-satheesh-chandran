@@ -14,7 +14,7 @@ int main(void)
 {
   List_ptr list = create_list();
   char action = get_character();
-  while(action != 'm')
+  while (action != 'm')
   {
     decide_actions(list, action);
     action = get_character();

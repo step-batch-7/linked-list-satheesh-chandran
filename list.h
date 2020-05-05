@@ -48,5 +48,9 @@ STATUS remove_at(List_ptr, int position); // g
 STATUS insert_at(List_ptr, int value, int position); // c
 
 void decide_actions(List_ptr list, char decider);
+void print_status(STATUS result);
+int get_input(const char question[]);
+STATUS perform_actions_upon_input_value(List_ptr list, char decider);
+STATUS perform_action_only_on_list(List_ptr list, char decider);
 
 #endif

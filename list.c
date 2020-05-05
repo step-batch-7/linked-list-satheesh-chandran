@@ -274,5 +274,4 @@ void decide_actions(List_ptr list, char decider)
     result = insert_at(list, value, position);
   }
   print_status(result);
-  // display(list);
 }
