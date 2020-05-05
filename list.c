@@ -55,7 +55,7 @@ STATUS insert_at(List_ptr list, int value, int position)
   if (position == list->count) return add_to_end(list, value);
   if (position < 0 || position > list->count) return Failure;
   Node_ptr current_node = list->head;
-  for (int index = 0; index < position; index++)
+  for (int index = 1; index < position; index++)
   {
     current_node = current_node->next;
   }
@@ -157,6 +157,7 @@ STATUS clear_list(List_ptr list)
   free_nodes(list);
   list->last = NULL;
   list->head = NULL;
+  list->count = 0;
   return Success;
 }
 
