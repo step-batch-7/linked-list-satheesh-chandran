@@ -52,9 +52,10 @@ void display(List_ptr list)
 
 STATUS insert_at(List_ptr list, int value, int position)
 {
-  Node_ptr current_node = list->head;
-  if (list->count < position) return Failure;
   if (position == 0) return add_to_start(list, value);
+  if (position == list->count) return add_to_end(list, value);
+  if (position < 0 || position > list->count + 1) return Failure;
+  Node_ptr current_node = list->head;
   for (int index = 0; index < position; index++)
   {
     current_node = current_node->next;
@@ -171,6 +172,7 @@ STATUS remove_at(List_ptr list, int position)
 {
   if (position >= list->count || position < 0) return Failure;
   if (position == 0) return remove_from_start(list);
+  if (position == list->count - 1) return remove_from_end(list);
   Node_ptr current_node = list->head;
   for (int index = 1; index < position; index++)
   {
