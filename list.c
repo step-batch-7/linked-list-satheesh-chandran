@@ -114,10 +114,8 @@ STATUS add_unique(List_ptr list, int value)
 
 STATUS remove_from_start(List_ptr list)
 {
-  if (list->head == NULL || list->head == list->last) 
-  {
-    return clear_list(list);
-  }
+  if (list->count == 0) return Failure;
+  if (list->head == list->last) return clear_list(list);
   Node_ptr head = list->head->next;
   list->head = head;
   list->count--;
@@ -126,17 +124,16 @@ STATUS remove_from_start(List_ptr list)
 
 STATUS remove_from_end(List_ptr list)
 {
-  if (list->head == NULL || list->head == list->last) 
-  {
-    return clear_list(list);
-  }
+  if (list->count == 0) return Failure;
+  if (list->head == list->last) return clear_list(list);
   Node_ptr current_node = list->head;
   for (int index = 1; index < list->count - 1; index++)
   {
     current_node = current_node->next;
   }
+  Node_ptr node_to_be_free = current_node->next;
   list->last = current_node;
-  free(current_node->next);
+  free(node_to_be_free);
   current_node->next = NULL;
   list->count--;
   return Success;
@@ -172,7 +169,7 @@ STATUS clear_list(List_ptr list)
 
 STATUS remove_at(List_ptr list, int position)
 {
-  if (list->count < position) return Failure;
+  if (position >= list->count || position < 0) return Failure;
   if (position == 0) return remove_from_start(list);
   Node_ptr current_node = list->head;
   for (int index = 1; index < position; index++)
