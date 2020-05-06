@@ -202,11 +202,12 @@ STATUS remove_first_occurrence(List_ptr list, int value) // h
     pair.prev = pair.current;
     pair.current = pair.current->next;
   }
-  return Success;
+  return Failure;
 }
 
 STATUS remove_all_occurrences(List_ptr list, int value) // i
 {
+  STATUS status = Failure;
   Prev_Current_Pair pair = { NULL, list->head };
   while (pair.current != NULL)
   {
@@ -223,6 +224,7 @@ STATUS remove_all_occurrences(List_ptr list, int value) // i
       }
       pair.current = node_to_be_free->next;
       free(node_to_be_free);
+      status = Success;
       list->count--;
     }
     else
@@ -232,7 +234,7 @@ STATUS remove_all_occurrences(List_ptr list, int value) // i
     }
   }
   list->last = pair.prev; 
-  return Success;
+  return status;
 }
 
 STATUS perform_actions_upon_input_value(List_ptr list, char decider)
