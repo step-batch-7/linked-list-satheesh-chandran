@@ -231,6 +231,7 @@ STATUS remove_all_occurrences(List_ptr list, int value) // i
       pair.current = pair.current->next;
     }
   }
+  list->last = pair.prev; 
   return Success;
 }
 
